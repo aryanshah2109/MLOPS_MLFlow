@@ -1,2 +1,7 @@
 ./venv/*
 
+/mlartifacts/*
+/mlruns/*
+/Random-Forest-Model/*
+/mlflow.db
+/Confusion-Matrix.png

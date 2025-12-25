@@ -6,6 +6,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, confusion_matrix
 import matplotlib.pyplot as plt
 import seaborn as sns
+import dagshub
 
 
 wine = load_wine()
@@ -17,6 +18,7 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_
 n_estimators = 12
 max_depth = 3
 
+mlflow.autolog()
 mlflow.set_experiment("Learning_Exp1")
 
 mlflow.set_tracking_uri("http://127.0.0.1:5000")
@@ -33,14 +35,6 @@ with mlflow.start_run():
 
     accuracy = accuracy_score(y_test, y_pred)
 
-    mlflow.log_metric("accuracy",accuracy)
-    mlflow.log_params({
-        "max_depth":max_depth
-    })
-    mlflow.log_params({
-        "n_estimators":n_estimators
-    })
-
     print(accuracy)
 
     cm = confusion_matrix(y_test, y_pred)
@@ -53,12 +47,9 @@ with mlflow.start_run():
 
     plt.savefig("Confusion-Matrix.png")
 
-    mlflow.log_artifact("Confusion-Matrix.png")
     mlflow.log_artifact(__file__)
 
     mlflow.set_tags({
         "Author" : "Aryan",
         "Project_Name": "Wine Classification"
     })
-
-    mlflow.sklearn.log_model(model, "Random-Forest-Model")
